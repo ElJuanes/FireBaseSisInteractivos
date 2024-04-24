@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "851501127094",
+    "firebase_url": "https://fir-jeao-default-rtdb.firebaseio.com/",
+    "project_id": "fir-jeao",
+    "storage_bucket": "fir-jeao.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851501127094:android:1777ce4d6d284e579b5d17",
+        "android_client_info": {
+          "package_name": "com.jeao.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDb07Ugt1WXxOd6FWvkUraS-DIL7ampVhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
