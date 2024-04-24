@@ -72,3 +72,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_9_0.bundle
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_9_0.so
+Assets/Scenes/Game.unity
+Assets/New Material.mat
