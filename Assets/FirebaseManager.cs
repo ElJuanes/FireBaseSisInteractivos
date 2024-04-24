@@ -44,9 +44,9 @@ public class FirebaseManager : MonoBehaviour
 
     [Header("Game")]
 
-    [SerializeField] GameObject gameUI, menuUI, scoreboardUI;
+    [SerializeField] GameObject /*gameUI,*/ menuUI, scoreboardUI;
     [SerializeField] TMP_Text highScore;
-    [SerializeField] LoseManager highScoreIntern;
+   /* [SerializeField] LoseManager highScoreIntern;*/
 
 
     private void Awake()
@@ -165,14 +165,14 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogFormat("Usuario iniciado excitosamente: {0} ({1})", user.DisplayName, user.Email);
             warningLoginText.text = "";
 
-            StartCoroutine(LoadData());
+            //StartCoroutine(LoadData());
 
             yield return new WaitForSeconds(1);
 
             usernameField.text = user.DisplayName;
 
             UIManager.instance.RemoveAuth();
-            gameUI.SetActive(true);
+           //* gameUI.SetActive(true);
             menuUI.SetActive(true);
 
         }
@@ -233,8 +233,8 @@ public class FirebaseManager : MonoBehaviour
                 }
                 else
                 {
-                  var DBTask = dbReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);
-                  DBTask = dbReference.Child("users").Child(user.UserId).Child("score").SetValueAsync(0.ToString());
+                  /*var DBTask = dbReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);*/
+                  /* DBTask = dbReference.Child("users").Child(user.UserId).Child("score").SetValueAsync(0.ToString());*/
                   UIManager.instance.LoginScreen();
                   warningRegisterText.text = "";
                 }
@@ -252,7 +252,7 @@ public class FirebaseManager : MonoBehaviour
         if (DBTask.Exception != null) Debug.LogWarning($"Fallo al registrar la tarea {DBTask.Exception}");
     }
 
-    IEnumerator LoadData()
+    /*IEnumerator LoadData()
     {
         var DBTask = dbReference.Child("users").Child(user.UserId).GetValueAsync();
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
@@ -268,7 +268,7 @@ public class FirebaseManager : MonoBehaviour
             highScore.text = snapshot.Child("score").Value.ToString();
             highScoreIntern.highScore = int.Parse(highScore.text);
         }
-    }
+    }*/
 
     IEnumerator LoadScoreBoard()
     {
@@ -295,7 +295,7 @@ public class FirebaseManager : MonoBehaviour
         }
 
         scoreboardUI.SetActive(true);
-        gameUI.SetActive(false);
+        /*gameUI.SetActive(false);*/
         menuUI.SetActive(false);
 
     }
