@@ -46,7 +46,7 @@ public class UIController : MonoBehaviour
     {
         menuUI.SetActive(true);
        
-        scoreboardUI.SetActive(false);
+        gameUI.SetActive(false);
     }
 
    
