@@ -41,21 +41,24 @@ public class FirebaseManager : MonoBehaviour
     [SerializeField] TMP_Text usernameField;
     [SerializeField] GameObject scoreElement;
     [SerializeField] Transform scoreboardContent;
-
+    [SerializeField] public PointCounter PointCounter;
+    public static FirebaseManager instance;
     [Header("Game")]
 
     [SerializeField] GameObject /*gameUI,*/ menuUI, scoreboardUI;
     [SerializeField] TMP_Text highScore;
-   /* [SerializeField] LoseManager highScoreIntern;*/
+    /* [SerializeField] LoseManager highScoreIntern;*/
 
-
+    //public DatabaseReference dbReference;
     private void Awake()
     {
 
-
+        instance = this;
+        //dbReference = FirebaseDatabase.DefaultInstance.RootReference;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             dependencyStatus = task.Result;
+
             if (dependencyStatus == DependencyStatus.Available) InitializeFirebase();
             else print($"No se pueden resolver todas las dependencias de Firebase: {dependencyStatus}");
         });
@@ -89,10 +92,10 @@ public class FirebaseManager : MonoBehaviour
         FogotPassword(forgotPasswordEmail.text);
     }
 
-    public void ScoreBoardButton()
+   /* public void ScoreBoardButton()
     {
         StartCoroutine(LoadScoreBoard());
-    }
+    } */
 
     void FogotPassword(string forgotPasswordEmail)
     {
@@ -121,10 +124,10 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-    public void UpdateScore()
+    /*public void UpdateScore()
     {
         StartCoroutine(Score(int.Parse(highScore.text)));
-    }
+    } */
     IEnumerator Login(string email, string password)
     {
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(email, password);
@@ -191,26 +194,34 @@ public class FirebaseManager : MonoBehaviour
             {
                 Debug.LogWarning(message: $"Fallo en el registro con {RegisterTask.Exception}");
                 FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
-                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-                string message = "Registro fallido";
-
-                switch (errorCode)
+                if (firebaseEx != null)
                 {
-                    case AuthError.MissingEmail:
-                        message = "Falta correo";
-                        break;
-                    case AuthError.MissingPassword:
-                        message = "Falta contraseña";
-                        break;
-                    case AuthError.WeakPassword:
-                        message = "Contraseña debil";
-                        break;
-                    case AuthError.EmailAlreadyInUse:
-                        message = "Correo ya en uso";
-                        break;
+                    AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+                    string message = "Registro fallido";
+
+                    switch (errorCode)
+                    {
+                        case AuthError.MissingEmail:
+                            message = "Falta correo";
+                            break;
+                        case AuthError.MissingPassword:
+                            message = "Falta contraseña";
+                            break;
+                        case AuthError.WeakPassword:
+                            message = "Contraseña débil";
+                            break;
+                        case AuthError.EmailAlreadyInUse:
+                            message = "Correo ya en uso";
+                            break;
+                    }
+                    warningRegisterText.text = message;
                 }
-                warningRegisterText.text = message;
+                else
+                {
+                    // Si la excepción no es de tipo FirebaseException, muestra un mensaje genérico de error
+                    warningRegisterText.text = "Error al registrar el usuario";
+                }
             }
             else
             {
@@ -233,17 +244,32 @@ public class FirebaseManager : MonoBehaviour
                 }
                 else
                 {
-                  /*var DBTask = dbReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);*/
-                  /* DBTask = dbReference.Child("users").Child(user.UserId).Child("score").SetValueAsync(0.ToString());*/
-                  UIManager.instance.LoginScreen();
-                  warningRegisterText.text = "";
+                    Debug.LogFormat("Firebase user created successfully: {0} ({1})", user.DisplayName, user.UserId);
+                    var dbTask = dbReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);
+                    if (dbReference == null)
+                    {
+                        Debug.LogError("dbReference is null");
+                        yield break; // Salir del método si dbReference es nulo
+                    }
+                    yield return new WaitUntil(() => dbTask.IsCompleted);
+                    if (dbTask.Exception != null)
+                    {
+                        Debug.LogWarning($"Fallo en la escritura de datos con {dbTask.Exception}");
+                        warningRegisterText.text = "Error al escribir en la base de datos";
+                    }
+                    else
+                    {
+                        Debug.Log("Username added to database successfully");
+                        // Si todo ha ido bien, puedes limpiar el campo de advertencia y hacer cualquier otra acción necesaria
+                        warningRegisterText.text = "";
+                        // Por ejemplo, aquí puedes cambiar la pantalla o realizar otras acciones de IU
+                        UIManager.instance.LoginScreen();
+                    }
                 }
-                
             }
         }
-    }
 
-    IEnumerator Score(int score)
+        IEnumerator Score(int score)
     {
         var DBTask = dbReference.Child("users").Child(user.UserId).Child("score").SetValueAsync(score);
 
@@ -298,5 +324,6 @@ public class FirebaseManager : MonoBehaviour
         /*gameUI.SetActive(false);*/
         menuUI.SetActive(false);
 
+    }
     }
 }

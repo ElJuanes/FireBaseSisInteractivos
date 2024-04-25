@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.028577158, g: 0.032566845, b: 0.0778241, a: 1}
+  m_IndirectSpecularColor: {r: 0.028577989, g: 0.032587077, b: 0.07794568, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1016,7 +1016,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &207572003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4631,7 +4631,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &950585492
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4672,7 +4672,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &955484937
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4715,6 +4715,18 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 065a10465a38fa2429622ab9e965a611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &960916201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960916195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f902899b2bb7d0442a9e4a5e2ce24209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1004898664
@@ -7258,7 +7270,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1456760275}
   m_TextViewport: {fileID: 0}
   m_TextComponent: {fileID: 0}
   m_Placeholder: {fileID: 0}
@@ -8570,8 +8582,9 @@ MonoBehaviour:
   forgotPasswordEmail: {fileID: 1456760274}
   warningForgetPasswordText: {fileID: 1044804893}
   usernameField: {fileID: 1438740517}
-  scoreElement: {fileID: 208443553}
+  scoreElement: {fileID: 1749252537}
   scoreboardContent: {fileID: 171923397}
+  PointCounter: {fileID: 0}
   menuUI: {fileID: 950585491}
   scoreboardUI: {fileID: 5957539}
   highScore: {fileID: 1974426042}
@@ -8586,13 +8599,14 @@ GameObject:
   - component: {fileID: 1749252538}
   - component: {fileID: 1749252540}
   - component: {fileID: 1749252539}
+  - component: {fileID: 1749252541}
   m_Layer: 0
   m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1749252538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8709,6 +8723,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749252537}
   m_CullTransparentMesh: 1
+--- !u!114 &1749252541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749252537}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a0f7b38855bb04ebc21d2224e05477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 1749252539}
 --- !u!1 &1770401575
 GameObject:
   m_ObjectHideFlags: 0
@@ -9342,7 +9369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1871637972
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11082,6 +11109,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8230855122825042360, guid: 474e30e23fa2f9f4998e7e6cab3ec3d2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 960916200}
+    - targetCorrespondingSourceObject: {fileID: 8230855122825042360, guid: 474e30e23fa2f9f4998e7e6cab3ec3d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 960916201}
   m_SourcePrefab: {fileID: 100100000, guid: 474e30e23fa2f9f4998e7e6cab3ec3d2, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -8,10 +8,35 @@ public class PointCounter : MonoBehaviour
     private float startTime = 0f;
     private bool counting = false;
     private bool canClick = true;
+    private static FirebaseManager firebaseManager;
+
+    private string nombreUsuario;
+    private bool estaJugando;
+    public static PointCounter instance;
 
     void Start()
     {
         scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay>();
+        GameObject uiObject = GameObject.Find("UI");
+        if (uiObject == null)
+        {
+            Debug.LogError("No se encontró el objeto 'UI' en la escena.");
+            return;
+        }
+        firebaseManager = uiObject.GetComponentInChildren<FirebaseManager>();
+        if (firebaseManager == null)
+        {
+            Debug.LogError("No se encontró un componente FirebaseManager en el objeto 'UI'.");
+            return;
+        }
+
+        // Obtener la referencia a ScoreDisplay
+        scoreDisplay = FindObjectOfType<ScoreDisplay>();
+    }
+    private void Awake()
+    {
+        // Asignar esta instancia al inicio del juego
+        instance = this;
     }
     public void ActivarScript()
      {
@@ -46,51 +71,100 @@ public class PointCounter : MonoBehaviour
                 {
                     counting = false;
                     canClick = false;
-                    Invoke("EnableClick", 2f); // Permitir clics nuevamente después de 2 segundos
+                    Invoke("EnableClick", 2f);
                     Debug.Log("Tiempo Finalizado");
+                    UpdateScoreInFirebase(points);
                     Debug.Log(numTurns + "Vuelta: Reiniciando...");
                     startTime = Time.time;
                     points = 0;
                     numTurns = 0;
                 }
             }
+
         }
+    }
+    void UpdateScoreInFirebase(int score)
+    {
+        // Asegúrate de tener una referencia a la base de datos en tu FirebaseManager
+        // Supongamos que tienes una referencia llamada "dbReference"
+        if (FirebaseManager.instance != null && FirebaseManager.instance.dbReference != null && FirebaseManager.instance.user != null)
+        {
+            // Guarda la puntuación del usuario en la base de datos
+            FirebaseManager.instance.dbReference.Child("users").Child(FirebaseManager.instance.user.UserId).Child("score").SetValueAsync(score)
+                .ContinueWith(task =>
+                {
+                    if (task.IsFaulted || task.IsCanceled)
+                    {
+                        // Maneja cualquier error aquí
+                        Debug.LogError("Error al guardar la puntuación en Firebase: " + task.Exception);
+                    }
+                    else
+                    {
+                        // La puntuación se guardó correctamente
+                        Debug.Log("Puntuación guardada en Firebase: " + score);
+                    }
+                });
+        }
+        else
+        {
+            Debug.LogWarning("No se pudo guardar la puntuación en Firebase: referencia nula");
+        }
+    }
+
+    public int GetPoints()
+    {
+        return points;
     }
 
     void EnableClick()
     {
         canClick = true;
     }
+    public void UpdatePoints(int newPoints)
+    {
+        points = newPoints;
+    }
+    public void ActualizarNombreUsuario(string nombre)
+    {
+        nombreUsuario = nombre;
+        Debug.Log("Nombre de usuario actualizado: " + nombreUsuario);
+    }
+    public void ActualizarEstadoJugador(bool estado)
+    {
+        estaJugando = estado;
+        Debug.Log("Estado del jugador actualizado: " + estaJugando);
+    }
+
 }
 
-   /* void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!counting)
-            {
-                startTime = Time.time;
-                counting = true;
-            }
-            else
-            {
-                if (Time.time - startTime < 10f && points < 100)
-                {
-                    points++;
-                    Debug.Log("Puntos: " + points);
-                }
+/* void Update()
+ {
+     if (Input.GetMouseButtonDown(0))
+     {
+         if (!counting)
+         {
+             startTime = Time.time;
+             counting = true;
+         }
+         else
+         {
+             if (Time.time - startTime < 10f && points < 100)
+             {
+                 points++;
+                 Debug.Log("Puntos: " + points);
+             }
 
-                else
-                {
-                    Debug.Log("TiempoFinalizado");
-                    if (Time.time - startTime >= 10f || points >= 100)
-                    {
-                        numTurns++;
-                    }
-                    startTime = Time.time;
-                    points = 0;
-                    Debug.Log(numTurns + "Vuelta: Reinciando");
-                }
-            }
-        }
-    }*/
+             else
+             {
+                 Debug.Log("TiempoFinalizado");
+                 if (Time.time - startTime >= 10f || points >= 100)
+                 {
+                     numTurns++;
+                 }
+                 startTime = Time.time;
+                 points = 0;
+                 Debug.Log(numTurns + "Vuelta: Reinciando");
+             }
+         }
+     }
+ }*/
