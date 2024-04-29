@@ -245,26 +245,18 @@ public class FirebaseManager : MonoBehaviour
                 else
                 {
                     Debug.LogFormat("Firebase user created successfully: {0} ({1})", user.DisplayName, user.UserId);
-                    var dbTask = dbReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);
-                    if (dbReference == null)
-                    {
-                        Debug.LogError("dbReference is null");
-                        yield break; // Salir del método si dbReference es nulo
-                    }
-                    yield return new WaitUntil(() => dbTask.IsCompleted);
-                    if (dbTask.Exception != null)
-                    {
-                        Debug.LogWarning($"Fallo en la escritura de datos con {dbTask.Exception}");
-                        warningRegisterText.text = "Error al escribir en la base de datos";
-                    }
-                    else
-                    {
+                    FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(user.UserId).Child("username").SetValueAsync(username);
+                   
+                   
+                   
+                   
+                   
                         Debug.Log("Username added to database successfully");
                         // Si todo ha ido bien, puedes limpiar el campo de advertencia y hacer cualquier otra acción necesaria
                         warningRegisterText.text = "";
                         // Por ejemplo, aquí puedes cambiar la pantalla o realizar otras acciones de IU
-                        UIManager.instance.LoginScreen();
-                    }
+                       UIManager.instance.LoginScreen();
+                    
                 }
             }
         }
