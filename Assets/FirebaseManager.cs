@@ -47,6 +47,7 @@ public class FirebaseManager : MonoBehaviour
 
     [SerializeField] GameObject /*gameUI,*/ menuUI, scoreboardUI;
     [SerializeField] TMP_Text highScore;
+    [SerializeField] GameObject ScoreUsuario;
     /* [SerializeField] LoseManager highScoreIntern;*/
 
     //public DatabaseReference dbReference;
@@ -177,6 +178,7 @@ public class FirebaseManager : MonoBehaviour
             UIManager.instance.RemoveAuth();
            //* gameUI.SetActive(true);
             menuUI.SetActive(true);
+            ScoreUsuario.SetActive(true);
 
         }
     }

@@ -45,6 +45,7 @@ public class UIController : MonoBehaviour
     public void BackToMenu()
     {
         menuUI.SetActive(true);
+        scoreboardUI.SetActive(false);
        
         gameUI.SetActive(false);
     }

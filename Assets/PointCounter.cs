@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class PointCounter : MonoBehaviour
 {
     private ScoreDisplay scoreDisplay;
@@ -16,6 +16,10 @@ public class PointCounter : MonoBehaviour
 
     void Start()
     {
+        if (scoreDisplay == null)
+        {
+            scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay>(); // Use FindObjectOfType if not directly referenced
+        }
         scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay>();
         GameObject uiObject = GameObject.Find("UI");
         if (uiObject == null)
@@ -78,6 +82,14 @@ public class PointCounter : MonoBehaviour
                     startTime = Time.time;
                     points = 0;
                     numTurns = 0;
+                }
+                if (scoreDisplay != null) // Check if 'scoreDisplay' is not null before accessing it
+                {
+                    scoreDisplay.UpdateScoreText(points);
+                }
+                else
+                {
+                    Debug.LogError("ScoreDisplay reference is null. Please ensure it is set correctly.");
                 }
             }
 
