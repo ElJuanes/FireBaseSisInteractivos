@@ -270,7 +270,7 @@ public class FirebaseManager : MonoBehaviour
         if (DBTask.Exception != null) Debug.LogWarning($"Fallo al registrar la tarea {DBTask.Exception}");
     }
 
-    /*IEnumerator LoadData()
+    IEnumerator LoadData()
     {
         var DBTask = dbReference.Child("users").Child(user.UserId).GetValueAsync();
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
@@ -284,9 +284,9 @@ public class FirebaseManager : MonoBehaviour
             DataSnapshot snapshot = DBTask.Result;
 
             highScore.text = snapshot.Child("score").Value.ToString();
-            highScoreIntern.highScore = int.Parse(highScore.text);
+            //highScoreIntern.highScore = int.Parse(highScore.text);
         }
-    }*/
+    }
 
     IEnumerator LoadScoreBoard()
     {
