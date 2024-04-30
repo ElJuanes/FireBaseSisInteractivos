@@ -12,6 +12,7 @@ public class ScoreboardManager : MonoBehaviour
 
     public GameObject scoreboard; // Reference to the Scoreboard GameObject
     public TextMeshProUGUI text; // Reference to the TextMeshPro object for displaying the leaderboard
+    public GameObject LeaderboardUserText;
 
     void Start()
     {
@@ -23,10 +24,10 @@ public class ScoreboardManager : MonoBehaviour
                 Debug.LogError("Firebase initialization failed: " + task.Exception);
                 return;
             }
-           
+
             dbReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users");
             Debug.Log("Se inicio firebase2");
-              
+
         });
     }
 
@@ -34,7 +35,7 @@ public class ScoreboardManager : MonoBehaviour
     {
         Debug.Log("Se inicio GetScoreboardData");
         StringBuilder leaderboardString = new StringBuilder();
-        dbReference.OrderByChild("score").LimitToFirst(10).GetValueAsync() // Retrieve top 10 scores
+        dbReference.OrderByChild("score").LimitToLast(10).GetValueAsync() // Retrieve top 10 scores
             .ContinueWith(task =>
             {
                 if (task.IsFaulted || task.IsCanceled)
@@ -50,7 +51,7 @@ public class ScoreboardManager : MonoBehaviour
                     return;
                 }
                 Debug.Log("iniciando limpieza");
-                
+
                 //ClearLeaderboardUI();
                 //Debug.Log("Acabando limpieza");
 
@@ -76,21 +77,29 @@ public class ScoreboardManager : MonoBehaviour
                     Debug.Log($"Leaderboard entry {i + 1}: {username} - {score}");
                     leaderboardString.AppendLine($"{username} = {score}"); // Add username and score to the string
                     i++;
-                   // Debug.Log($"Leaderboard entrytest2 {i + 1}: {username} - {score}");
+                    // Debug.Log($"Leaderboard entrytest2 {i + 1}: {username} - {score}");
                     // Update UI elements with username and score
-                    
+
                 }
                 text.text = leaderboardString.ToString();
+                
             });
     }
 
-    // Clear leaderboard UI text
-  /*  void ClearLeaderboardUI()
+    public void RefrescarLeader()
     {
-        foreach (TextMeshProUGUI text in elements.GetComponentsInChildren<TextMeshProUGUI>())
-        {
-            text.text = "";
-        }
-        
-    }*/
+        Debug.Log("Refrescando la leaderboard");
+        LeaderboardUserText.SetActive(false);
+        LeaderboardUserText.SetActive(true);
+    }
+
+    // Clear leaderboard UI text
+    /*  void ClearLeaderboardUI()
+      {
+          foreach (TextMeshProUGUI text in elements.GetComponentsInChildren<TextMeshProUGUI>())
+          {
+              text.text = "";
+          }
+
+      }*/
 }
