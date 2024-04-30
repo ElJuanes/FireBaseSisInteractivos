@@ -56,8 +56,16 @@ public class ScoreboardManager : MonoBehaviour
                 //Debug.Log("Acabando limpieza");
 
                 // Iterate through users (child nodes) in the order they are stored
-                int i = 0;
+                //nuevo
+                List<DataSnapshot> users = new List<DataSnapshot>();
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
+                {
+                    users.Add(userSnapshot);
+                }
+                users.Reverse();
+                // fin de lo nuevo
+                int i = 0;
+                foreach (DataSnapshot userSnapshot in users)
                 {
                     if (i >= 10) // Limit to top 10 entries
                         break;
