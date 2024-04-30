@@ -11,8 +11,8 @@ public class ScoreboardManager : MonoBehaviour
 
     public GameObject scoreboard; // Reference to the Scoreboard GameObject
     public GameObject elements;
-    public TextMeshProUGUI[] leaderboardUserText; // Array to hold username TextMeshPro objects
-    public TextMeshProUGUI[] leaderboardScoreText; // Array to hold score TextMeshPro objects
+    public TextMeshProUGUI[] LeaderboardUserText; // Array to hold username TextMeshPro objects
+    public TextMeshProUGUI[] LeaderboardScoreText; // Array to hold score TextMeshPro objects
 
     void Start()
     {
@@ -26,8 +26,8 @@ public class ScoreboardManager : MonoBehaviour
             }
            
             dbReference = FirebaseDatabase.DefaultInstance.RootReference.Child("users");
-            Debug.Log("Se inicio firebase");
-            GetScoreboardData();    
+            Debug.Log("Se inicio firebase2");
+              
         });
     }
 
@@ -49,15 +49,16 @@ public class ScoreboardManager : MonoBehaviour
                     Debug.LogWarning("No score data found in the database.");
                     return;
                 }
-
-                // Clear existing UI data
-                ClearLeaderboardUI();
+                Debug.Log("iniciando limpieza");
+                
+                //ClearLeaderboardUI();
+                //Debug.Log("Acabando limpieza");
 
                 // Iterate through users (child nodes) in the order they are stored
                 int i = 0;
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
-                    if (i >= leaderboardUserText.Length || i >= leaderboardScoreText.Length)
+                    if (i >= LeaderboardUserText.Length || i >= LeaderboardScoreText.Length)
                         break;
 
                     string username = userSnapshot.Key; // Key is the username
@@ -74,8 +75,8 @@ public class ScoreboardManager : MonoBehaviour
                     }
                     Debug.Log($"Leaderboard entry {i + 1}: {username} - {score}");
                     // Update UI elements with username and score
-                    leaderboardUserText[i].text = username;
-                    leaderboardScoreText[i].text = score.ToString();
+                    LeaderboardUserText[i].text = username;
+                    LeaderboardScoreText[i].text = score.ToString();
                    
 
                     i++;
@@ -84,11 +85,12 @@ public class ScoreboardManager : MonoBehaviour
     }
 
     // Clear leaderboard UI text
-    void ClearLeaderboardUI()
+  /*  void ClearLeaderboardUI()
     {
         foreach (TextMeshProUGUI text in elements.GetComponentsInChildren<TextMeshProUGUI>())
         {
             text.text = "";
         }
-    }
+        
+    }*/
 }
