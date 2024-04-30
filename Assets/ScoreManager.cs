@@ -4,15 +4,14 @@ using Firebase;
 using Firebase.Database;
 using TMPro;
 using Firebase.Extensions;
+using System.Text;
 
 public class ScoreboardManager : MonoBehaviour
 {
     private DatabaseReference dbReference;
 
     public GameObject scoreboard; // Reference to the Scoreboard GameObject
-    public GameObject elements;
-    public TextMeshProUGUI[] LeaderboardUserText; // Array to hold username TextMeshPro objects
-    public TextMeshProUGUI[] LeaderboardScoreText; // Array to hold score TextMeshPro objects
+    public TextMeshProUGUI text; // Reference to the TextMeshPro object for displaying the leaderboard
 
     void Start()
     {
@@ -34,6 +33,7 @@ public class ScoreboardManager : MonoBehaviour
     public void GetScoreboardData()
     {
         Debug.Log("Se inicio GetScoreboardData");
+        StringBuilder leaderboardString = new StringBuilder();
         dbReference.OrderByChild("score").LimitToFirst(10).GetValueAsync() // Retrieve top 10 scores
             .ContinueWith(task =>
             {
@@ -58,7 +58,7 @@ public class ScoreboardManager : MonoBehaviour
                 int i = 0;
                 foreach (DataSnapshot userSnapshot in snapshot.Children)
                 {
-                    if (i >= LeaderboardUserText.Length || i >= LeaderboardScoreText.Length)
+                    if (i >= 10) // Limit to top 10 entries
                         break;
 
                     string username = userSnapshot.Key; // Key is the username
@@ -74,13 +74,13 @@ public class ScoreboardManager : MonoBehaviour
                         continue; // Skip this user if score parsing fails
                     }
                     Debug.Log($"Leaderboard entry {i + 1}: {username} - {score}");
-                    // Update UI elements with username and score
-                    LeaderboardUserText[i].text = username;
-                    LeaderboardScoreText[i].text = score.ToString();
-                   
-
+                    leaderboardString.AppendLine($"{username} = {score}"); // Add username and score to the string
                     i++;
+                   // Debug.Log($"Leaderboard entrytest2 {i + 1}: {username} - {score}");
+                    // Update UI elements with username and score
+                    
                 }
+                text.text = leaderboardString.ToString();
             });
     }
 

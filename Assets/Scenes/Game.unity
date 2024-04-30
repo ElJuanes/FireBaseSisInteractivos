@@ -915,29 +915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreboard: {fileID: 171923396}
-  elements: {fileID: 368927567}
-  LeaderboardUserText:
-  - {fileID: 2135807857}
-  - {fileID: 894548689}
-  - {fileID: 1435165313}
-  - {fileID: 1484942322}
-  - {fileID: 726638559}
-  - {fileID: 888985739}
-  - {fileID: 568262928}
-  - {fileID: 1661077405}
-  - {fileID: 902122808}
-  - {fileID: 1932313417}
-  LeaderboardScoreText:
-  - {fileID: 418051182}
-  - {fileID: 460655975}
-  - {fileID: 1173662186}
-  - {fileID: 1326850053}
-  - {fileID: 623870063}
-  - {fileID: 1485945118}
-  - {fileID: 1995274021}
-  - {fileID: 468592553}
-  - {fileID: 583790865}
-  - {fileID: 121975527}
+  text: {fileID: 2135807857}
 --- !u!1 &171923396
 GameObject:
   m_ObjectHideFlags: 0
