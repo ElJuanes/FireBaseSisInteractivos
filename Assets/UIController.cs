@@ -9,7 +9,6 @@ public class UIController : MonoBehaviour
     [Header("Game UI")]
    
     public TextMeshProUGUI scoreText;
-    [SerializeField] ScoreManager scoreManager;
     [SerializeField] GameObject gameUI;
 
     [Header("Menu")]
@@ -18,15 +17,19 @@ public class UIController : MonoBehaviour
     [Header("Scoreboard")]
     [SerializeField] GameObject scoreboardUI;
 
-    private void Start()
-    {
-        scoreManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreManager>();
-    }
+    [Header("SCore")]
+    [SerializeField] GameObject ScoreUsserUI;
 
-    public void UpdateScore()
+    [SerializeField] ScoreboardManager scoreboardManager;
+    /* private void Start()
+     {
+         scoreManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<ScoreBoardManager>();
+     }*/
+
+    /*public void UpdateScore()
     {
         scoreText.text = scoreManager.score.ToString();
-    }
+    }*/
 
     public void PlayButton()
     {
@@ -39,14 +42,17 @@ public class UIController : MonoBehaviour
     {
         scoreboardUI.SetActive(true);
         menuUI.SetActive(false);
-       
+        ScoreUsserUI.SetActive(false);
+
+       // scoreboardManager.GetScoreboardData();
+
     }
 
     public void BackToMenu()
     {
         menuUI.SetActive(true);
         scoreboardUI.SetActive(false);
-       
+        ScoreUsserUI.SetActive(true);
         gameUI.SetActive(false);
     }
 
