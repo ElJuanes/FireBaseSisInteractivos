@@ -34,62 +34,58 @@ public class ScoreboardManager : MonoBehaviour
     public void GetScoreboardData()
     {
         Debug.Log("Se inicio GetScoreboardData");
-        StringBuilder leaderboardString = new StringBuilder();
-        dbReference.OrderByChild("score").LimitToLast(10).GetValueAsync() // Retrieve top 10 scores
-            .ContinueWith(task =>
-            {
-                if (task.IsFaulted || task.IsCanceled)
-                {
-                    Debug.LogError("Error retrieving score data: " + task.Exception);
-                    return;
-                }
+        StringBuilder leaderboardString = new StringBuilder(); // Create a StringBuilder
 
-                DataSnapshot snapshot = task.Result;
-                if (snapshot.Value == null)
-                {
-                    Debug.LogWarning("No score data found in the database.");
-                    return;
-                }
-                Debug.Log("iniciando limpieza");
+        dbReference.OrderByChild("score").LimitToLast(10).GetValueAsync() // Retrieve top 10 scores in descending order
+          .ContinueWith(task =>
+          {
+              if (task.IsFaulted || task.IsCanceled)
+              {
+                  Debug.LogError("Error retrieving score data: " + task.Exception);
+                  return;
+              }
 
-                //ClearLeaderboardUI();
-                //Debug.Log("Acabando limpieza");
+              DataSnapshot snapshot = task.Result;
+              if (snapshot.Value == null)
+              {
+                  Debug.LogWarning("No score data found in the database.");
+                  return;
+              }
+              Debug.Log("iniciando limpieza");
 
-                // Iterate through users (child nodes) in the order they are stored
-                //nuevo
-                List<DataSnapshot> users = new List<DataSnapshot>();
-                foreach (DataSnapshot userSnapshot in snapshot.Children)
-                {
-                    users.Add(userSnapshot);
-                }
-                users.Reverse();
-                // fin de lo nuevo
-                int i = 0;
-                foreach (DataSnapshot userSnapshot in users)
-                {
-                    if (i >= 10) // Limit to top 10 entries
-                        break;
+              // Iterate through users (child nodes) in descending order
+              List<DataSnapshot> users = new List<DataSnapshot>();
+              foreach (DataSnapshot userSnapshot in snapshot.Children)
+              {
+                  users.Add(userSnapshot);
+              }
 
-                    string username = userSnapshot.Key; // Key is the username
-                    int score = 0;
-                    try
-                    {
-                        score = int.Parse(userSnapshot.Child("score").Value.ToString());
-                    }
-                    catch (System.FormatException)
-                    {
-                        Debug.LogError("Invalid score format for user: " + username);
-                        Debug.LogError("Score data: " + userSnapshot.Child("score").Value.ToString());
-                        continue; // Skip this user if score parsing fails
-                    }
-                    Debug.Log($"Leaderboard entry {i + 1}: {username} - {score}");
-                    leaderboardString.AppendLine($"{username} = {score}"); // Add username and score to the string
-                    i++;
-                    // Debug.Log($"Leaderboard entrytest2 {i + 1}: {username} - {score}");
-                    // Update UI elements with username and score
+              users.Reverse(); // Reverse the list for top-down order
 
-                }
-                text.text = leaderboardString.ToString();
+              int i = 0;
+              foreach (DataSnapshot userSnapshot in users)
+              {
+                  if (i >= 10) // Limit to top 10 entries
+                      break;
+
+                  // Retrieve username from the specific field (modify if needed)
+                  string username = userSnapshot.Child("username").Value.ToString();
+                  int score = 0;
+                  try
+                  {
+                      score = int.Parse(userSnapshot.Child("score").Value.ToString());
+                  }
+                  catch (System.FormatException)
+                  {
+                      Debug.LogError("Invalid score format for user: " + username);
+                      Debug.LogError("Score data: " + userSnapshot.Child("score").Value.ToString());
+                      continue; // Skip this user if score parsing fails
+                  }
+
+                  leaderboardString.AppendLine($"{username} = {score}"); // Add username and score to the string
+                  i++;
+              }
+              text.text = leaderboardString.ToString();
                 
             });
     }
